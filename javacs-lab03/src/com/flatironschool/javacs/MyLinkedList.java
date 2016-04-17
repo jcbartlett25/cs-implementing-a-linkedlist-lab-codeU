@@ -85,7 +85,25 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public void add(int index, E element) {
-		// TODO: fill this in
+		
+		if (index == 0) {
+
+			// Replace the head with a new node with element
+			head = new Node(element, head);
+		} 
+		else {
+
+			// Thank you getNode :) life was much easier once I found this method
+			// Jump to the node before the index
+			Node node = getNode(index - 1);
+
+			// Replace the next link with new node with element and link it with
+			// The previous's next Node
+			node.next = new Node(element, node.next);
+		}
+
+		// Kept failing because I forgot about size...
+		size++;
 	}
 
 	@Override
@@ -146,7 +164,22 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: fill this in
+
+		Node node = head;
+
+		for (int i = 0; i < size; i++) {
+
+			// can't use == for non-primitives
+			if (equals(target, node.cargo)) {
+
+				return i;
+			}
+
+			// Move through the list
+			node = node.next;
+		}
+
+		// Not found
 		return -1;
 	}
 
@@ -201,14 +234,44 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public boolean remove(Object obj) {
-		// TODO: fill this in
-		return false;
+		
+		// No need to rewrite code
+		int index = indexOf(obj);
+
+		// obj isn't in the list
+		if (index == -1) {
+
+			return false;
+		}
+
+		// Use other remove method
+		remove(index);
+
+		return true;
 	}
 
 	@Override
 	public E remove(int index) {
-		// TODO: fill this in
-		return null;
+
+		// to return after removal
+		E element = get(index);
+
+		if (index == 0) {
+
+			// If removing the head, need to reset the head
+			head = head.next;
+		} 
+		else {
+
+			// Adjust next of index-1 to node.next.next
+			Node node = getNode(index - 1);
+			node.next = node.next.next;
+		}
+
+		// once again, forgot to change the size -____-
+		size--;
+
+		return element;
 	}
 
 	@Override
